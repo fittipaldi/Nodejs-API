@@ -82,18 +82,6 @@ app.get('/message', (req, res, next) => {
     res.json(req.message);
 });
 
-// passport.serializeUser((user, done) => {
-//     done(null, user.user_id);
-// });
-//
-// passport.deserializeUser((id, done) => {
-//     CportalUserDetails.findByPk(id).then(user => {
-//         done(null, user);
-//     }).catch(err => {
-//         done(err);
-//     });
-// });
-
 // ======================= Custom Error Handler =============== //
 app.use((req, res) => {
     return res.status(404).send('Not Found');
