@@ -1,11 +1,12 @@
 const router = require('express').Router();
 const SoccerTeam = require('../lib/models').SoccerTeam;
+const SoccerTeamController = require('../lib/controllers/SoccerTeam');
 const passport = require('passport');
 const bearerAuth = passport.authenticate('bearer', {session: false});
 
 router.get('/all', bearerAuth, async (req, res) => {
     try {
-        const teams = await SoccerTeam.findAll();
+        const teams = await SoccerTeamController.getAll();
         return res.json({
             status: true,
             msg: 'Success',
@@ -23,29 +24,38 @@ router.get('/all', bearerAuth, async (req, res) => {
 
 router.post('/add', bearerAuth, async (req, res) => {
     try {
-        const name = (typeof req.body.name != 'undefined') ? req.body.name.trim() : '';
-        const country = (typeof req.body.country != 'undefined') ? req.body.country.trim() : '';
-        const flag = (typeof req.body.flag != 'undefined') ? req.body.flag.trim() : '';
 
-        if (!name) {
-            throw 'Missing Team Name';
-        }
-        if (!name) {
-            throw 'Missing Team Country';
-        }
-        if (!flag) {
-            throw 'Missing Team Flag';
-        }
-        const savedTeam = await new SoccerTeam({
-            name: name,
-            country: country,
-            flag_icon: flag
-        }).save();
+        const savedTeam = await SoccerTeamController.setItem(req.body);
 
         return res.json({
             status: true,
             msg: 'Success',
-            data: savedTeam.dataValues
+            data: savedTeam
+        });
+    } catch (err) {
+        const msg = (typeof err.message != 'undefined') ? err.message : err;
+        return res.status(500).json({
+            status: false,
+            msg: msg,
+            data: null
+        });
+    }
+});
+
+router.put('/edit', bearerAuth, async (req, res) => {
+    try {
+
+        const team_id = (typeof req.body.team_id != 'undefined') ? parseInt(req.body.team_id.trim()) : 0;
+        if (!team_id) {
+            throw 'Missing Team ID';
+        }
+
+        const savedTeam = await SoccerTeamController.editItem(team_id, req.body);
+
+        return res.json({
+            status: true,
+            msg: 'Success',
+            data: savedTeam
         });
     } catch (err) {
         const msg = (typeof err.message != 'undefined') ? err.message : err;
@@ -60,21 +70,11 @@ router.post('/add', bearerAuth, async (req, res) => {
 router.delete('/del', bearerAuth, async (req, res) => {
     try {
         const team_id = (typeof req.body.team_id != 'undefined') ? parseInt(req.body.team_id.trim()) : 0;
-
         if (!team_id) {
             throw 'Missing Team ID';
         }
 
-        const team = await SoccerTeam.findOne({
-            where: {
-                id: team_id
-            }
-        });
-
-        if (!team) {
-            throw 'Team not Found';
-        }
-        team.destroy();
+        const team = await SoccerTeamController.delItem(team_id);
 
         return res.json({
             status: true,
