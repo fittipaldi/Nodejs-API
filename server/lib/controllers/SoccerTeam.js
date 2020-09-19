@@ -7,6 +7,20 @@ const SoccerTeamController = {
         return all;
     },
 
+    getFindAll: async (data) => {
+        const all = await SoccerTeam.findAll({
+            where: data
+        });
+        return all;
+    },
+
+    getFindOne: async (data) => {
+        const all = await SoccerTeam.findOne({
+            where: data
+        });
+        return all;
+    },
+
     setItem: async (data) => {
 
         const name = (typeof data.name != 'undefined') ? data.name.trim() : '';
@@ -29,7 +43,7 @@ const SoccerTeamController = {
         }).save();
 
         if (saved) {
-            return saved.dataValues;
+            return saved.get();
         }
         return saved;
     },
@@ -66,7 +80,7 @@ const SoccerTeamController = {
         item.save();
 
         if (item) {
-            item.dataValues;
+            item.get();
         }
         return item;
     },

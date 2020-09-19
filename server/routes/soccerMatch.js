@@ -1,11 +1,11 @@
 const router = require('express').Router();
-const SoccerTeamController = require('../lib/controllers/SoccerTeam');
+const SoccerMatchController = require('../lib/controllers/SoccerMatch');
 const passport = require('passport');
 const bearerAuth = passport.authenticate('bearer', {session: false});
 
 router.get('/all', bearerAuth, async (req, res) => {
     try {
-        const teams = await SoccerTeamController.getAll();
+        const teams = await SoccerMatchController.getAll();
         return res.json({
             status: true,
             msg: 'Success',
@@ -24,7 +24,7 @@ router.get('/all', bearerAuth, async (req, res) => {
 router.post('/add', bearerAuth, async (req, res) => {
     try {
 
-        const savedTeam = await SoccerTeamController.setItem(req.body);
+        const savedTeam = await SoccerMatchController.setItem(req.body);
 
         return res.json({
             status: true,
