@@ -1,15 +1,22 @@
 const BearerStrategy = require('passport-http-bearer').Strategy;
+const Token = require('../models').Token;
 
-const bearerStrategy = new BearerStrategy((token, done) => {
+const bearerStrategy = new BearerStrategy(async (token, done) => {
+    try {
+        const auth = await Token.findOne({
+            where: {
+                token: token,
+                status: 1
+            }
+        });
 
-
-    console.log('\x1b[41m');
-    console.log(token);
-    console.log('\x1b[0m');
-
-    //if (err) { return done(err); }
-    //if (!user) { return done(null, false); }
-    return done(null, {user: 'allow'}, {scope: 'all'});
+        if (!auth) {
+            return done(null, false);
+        }
+        return done(null, auth, {scope: 'all'});
+    } catch (err) {
+        return done(err);
+    }
 });
 
 module.exports = bearerStrategy;
