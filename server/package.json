@@ -21,6 +21,7 @@
     "nodemon": "^2.0.4",
     "passport": "^0.4.1",
     "passport-http-bearer": "^1.0.1",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "supertest": "^4.0.2"
   }
 }

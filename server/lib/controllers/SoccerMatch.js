@@ -1,16 +1,48 @@
+const {sequelize, Op} = require('sequelize');
 const SoccerTeam = require('../models').SoccerTeam;
 const SoccerMatch = require('../models').SoccerMatch;
 SoccerMatch.belongsTo(SoccerTeam, {foreignKey: 'team_a', targetKey: 'id', as: 'team_a_data'});
 SoccerMatch.belongsTo(SoccerTeam, {foreignKey: 'team_z', targetKey: 'id', as: 'team_z_data'});
 const SoccerTeamController = require('../controllers/SoccerTeam');
+const {getMatchesByCountry} = require('../db/queries');
 
 const SoccerMatchController = {
 
     getAll: async () => {
         const all = await SoccerMatch.findAll({
-            include: ['team_a_data', 'team_z_data']
+            include: [
+                {association: 'team_a_data'},
+                {association: 'team_z_data'},
+            ],
+            order: [
+                ['date_time', 'ASC'],
+            ],
+            where: {}
         });
+        return all;
+    },
 
+    getAllByCountry: async (country) => {
+        const all = await SoccerMatch.findAll({
+            include: [
+                {
+                    association: 'team_a_data',
+                    where: {
+                        country: {[Op.eq]: country}
+                    }
+                },
+                {
+                    association: 'team_z_data',
+                    where: {
+                        country: {[Op.eq]: country}
+                    }
+                },
+            ],
+            order: [
+                ['date_time', 'ASC'],
+            ],
+            where: {}
+        });
         return all;
     },
 

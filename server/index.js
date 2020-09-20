@@ -26,6 +26,7 @@ const port = process.env.PORT || 5000;
 // Routes instance
 const routeSoccerTeam = require('./routes/soccerTeam');
 const routeSoccerMatch = require('./routes/soccerMatch');
+const routeCountry = require('./routes/Country');
 
 process.on('uncaughtException', function (e) {
     console.error('Error: ' + e);
@@ -72,6 +73,7 @@ app.get('/', (req, res) => {
 //router imports
 app.use('/soccer-team', routeSoccerTeam);
 app.use('/soccer-match', routeSoccerMatch);
+app.use('/country', routeCountry);
 
 app.get('/message', (req, res, next) => {
     if (req.session.message && req.session.message.hasOwnProperty('message') && req.session.message.hasOwnProperty('success')) {

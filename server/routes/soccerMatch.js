@@ -21,6 +21,25 @@ router.get('/all', bearerAuth, async (req, res) => {
     }
 });
 
+router.get('/all/:country', bearerAuth, async (req, res) => {
+    const country = req.params.country;
+    try {
+        const teams = await SoccerMatchController.getAllByCountry(country);
+        return res.json({
+            status: true,
+            msg: 'Success',
+            data: teams
+        });
+    } catch (err) {
+        const msg = (typeof err.message != 'undefined') ? err.message : err;
+        return res.status(500).json({
+            status: false,
+            msg: msg,
+            data: null
+        });
+    }
+});
+
 router.post('/add', bearerAuth, async (req, res) => {
     try {
 
@@ -43,13 +62,12 @@ router.post('/add', bearerAuth, async (req, res) => {
 
 router.put('/edit', bearerAuth, async (req, res) => {
     try {
-
-        const team_id = (typeof req.body.team_id != 'undefined') ? parseInt(req.body.team_id.trim()) : 0;
-        if (!team_id) {
-            throw 'Missing Team ID';
+        const match_id = (typeof req.body.match_id != 'undefined') ? parseInt(req.body.match_id.trim()) : 0;
+        if (!match_id) {
+            throw 'Missing Match ID';
         }
 
-        const savedTeam = await SoccerTeamController.editItem(team_id, req.body);
+        const savedTeam = await SoccerMatchController.editItem(match_id, req.body);
 
         return res.json({
             status: true,
@@ -68,17 +86,17 @@ router.put('/edit', bearerAuth, async (req, res) => {
 
 router.delete('/del', bearerAuth, async (req, res) => {
     try {
-        const team_id = (typeof req.body.team_id != 'undefined') ? parseInt(req.body.team_id.trim()) : 0;
-        if (!team_id) {
-            throw 'Missing Team ID';
+        const match_id = (typeof req.body.match_id != 'undefined') ? parseInt(req.body.match_id.trim()) : 0;
+        if (!match_id) {
+            throw 'Missing Match ID';
         }
 
-        const team = await SoccerTeamController.delItem(team_id);
+        const match = await SoccerMatchController.delItem(match_id);
 
         return res.json({
             status: true,
             msg: 'Success',
-            data: team
+            data: match
         });
     } catch (err) {
         const msg = (typeof err.message != 'undefined') ? err.message : err;
