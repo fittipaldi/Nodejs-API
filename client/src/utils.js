@@ -36,26 +36,56 @@ export class ServerApi extends React.Component {
         return list;
     }
 
-    static async ___Add() {
-        const dataParam = {
-            name: 'Team 1',
-            country: 'UK',
-            flag: 'flag.jpg',
-        };
+    static async getTeam(id) {
+        const item = await axios({
+            method: 'get',
+            url: this.getServerHost() + '/soccer-team/item/' + id,
+            headers: {
+                'Authorization': 'Bearer ' + this.getToken()
+            }
+        });
+        return item;
+    }
 
-        axios({
-            method: 'post',
-            url: this.getServerHost() + '/soccer-team/add',
+    static async detTeam(id) {
+        const item = await axios({
+            method: 'delete',
+            url: this.getServerHost() + '/soccer-team/del',
             headers: {
                 'Authorization': 'Bearer ' + this.getToken()
             },
-            data: dataParam
-        }).then((response) => {
-            console.log(response);
-        }).catch((err) => {
-            console.log(err);
+            data: {id}
         });
+        return item;
+    }
 
+    static async getTeams() {
+        const list = await axios({
+            method: 'get',
+            url: this.getServerHost() + '/soccer-team/all',
+            headers: {
+                'Authorization': 'Bearer ' + this.getToken()
+            }
+        });
+        return list;
+    }
+
+    static async setTeam(dataParam) {
+        let saved;
+        if (typeof dataParam.id != 'undefined' && dataParam.id > 0) {
+
+        } else {
+            saved = await axios({
+                method: 'post',
+                url: this.getServerHost() + '/soccer-team/add',
+                headers: {
+                    'Authorization': 'Bearer ' + this.getToken()
+                },
+                data: dataParam
+            });
+        }
+
+        return saved;
     }
 
 }

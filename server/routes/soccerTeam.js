@@ -21,6 +21,34 @@ router.get('/all', bearerAuth, async (req, res) => {
     }
 });
 
+router.get('/item/:id', bearerAuth, async (req, res) => {
+    try {
+        const id = req.params.id;
+        const team = await SoccerTeamController.getFindOne({id});
+
+        if (!team) {
+            return res.json({
+                status: false,
+                msg: 'Team Not Found',
+                data: null
+            });
+        }
+
+        return res.json({
+            status: true,
+            msg: 'Success',
+            data: team
+        });
+    } catch (err) {
+        const msg = (typeof err.message != 'undefined') ? err.message : err;
+        return res.status(500).json({
+            status: false,
+            msg: msg,
+            data: null
+        });
+    }
+});
+
 router.post('/add', bearerAuth, async (req, res) => {
     try {
 
@@ -44,12 +72,12 @@ router.post('/add', bearerAuth, async (req, res) => {
 router.put('/edit', bearerAuth, async (req, res) => {
     try {
 
-        const team_id = (typeof req.body.team_id != 'undefined') ? parseInt(req.body.team_id.trim()) : 0;
-        if (!team_id) {
+        const id = (typeof req.body.id != 'undefined') ? parseInt(req.body.id) : 0;
+        if (!id) {
             throw 'Missing Team ID';
         }
 
-        const savedTeam = await SoccerTeamController.editItem(team_id, req.body);
+        const savedTeam = await SoccerTeamController.editItem(id, req.body);
 
         return res.json({
             status: true,
@@ -68,12 +96,12 @@ router.put('/edit', bearerAuth, async (req, res) => {
 
 router.delete('/del', bearerAuth, async (req, res) => {
     try {
-        const team_id = (typeof req.body.team_id != 'undefined') ? parseInt(req.body.team_id.trim()) : 0;
-        if (!team_id) {
+        const id = (typeof req.body.id != 'undefined') ? parseInt(req.body.id) : 0;
+        if (!id) {
             throw 'Missing Team ID';
         }
 
-        const team = await SoccerTeamController.delItem(team_id);
+        const team = await SoccerTeamController.delItem(id);
 
         return res.json({
             status: true,

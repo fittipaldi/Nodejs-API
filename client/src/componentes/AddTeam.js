@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {ServerApi} from '../utils';
 import Header from './nav/Header';
 import TeamForm from "./team/TeamForm";
 
@@ -18,7 +17,7 @@ const AddTeam = (props) => {
         <div className="App">
             <Header clicked="matches"/>
 
-            <TeamForm name="qwwww" country="wewew"/>
+            <TeamForm/>
         </div>
     )
 };

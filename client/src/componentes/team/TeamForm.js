@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import Form, {getFormData, FieldType} from 'react-metaforms';
+import Form, {getFormData, required, setFieldValue} from 'react-metaforms';
 import {ServerApi} from '../../utils';
 
 const TeamForm = (props) => {
@@ -22,49 +22,62 @@ const TeamForm = (props) => {
         flag_icon = props.flag_icon;
     }
 
+    const {history} = props;
+
     const teamForm = [
         {
-            'name': 'id',
-            'type': 'hidden',
-            'value': id,
+            name: 'id',
+            type: 'hidden',
+            value: id,
         },
         {
-            'name': 'name',
-            'label': 'Team Name',
-            'type': 'text',
-            'value': name,
+            name: 'name',
+            label: 'Team Name',
+            type: 'text',
+            value: name,
+            validation: [
+                required('Fill the Team Name'),
+            ]
         },
         {
-            'name': 'country',
-            'label': 'Team Country',
-            'type': 'select',
-            'options': [
-                {'value': '', 'label': 'Choose one Country'},
+            name: 'country',
+            label: 'Team Country',
+            type: 'select',
+            options: [
+                {value: '', label: 'Choose one Country'},
             ],
-            'value': country,
+            value: country,
+            validation: [
+                required('Choose a Team Country'),
+            ]
         },
         {
-            'name': 'flag_icon',
-            'label': 'Flag Icon (CDN Link)',
-            'type': 'text',
-            'value': flag_icon,
+            name: 'flag_icon',
+            label: 'Flag Icon (CDN Link)',
+            type: 'text',
+            value: flag_icon,
+            validation: [
+                required('Fill the Team Flag Icon'),
+            ]
         },
         {
-            "type": "submit"
+            type: 'submit',
         }
     ];
 
     const [fields, setFields] = useState(teamForm);
 
-    const fromStarter = async () => {
-        await ServerApi.getCountry().then(rep => {
-            if (rep.data.status) {
-                for (let con of rep.data.data) {
+    const fromStarter = () => {
+        ServerApi.getCountry().then(resp => {
+            if (resp.data.status) {
+                for (let con of resp.data.data) {
                     teamForm[2].options.push({
                         'value': con.country_name,
                         'label': con.country_name
                     });
                 }
+            } else {
+                console.log(resp.data.msg);
             }
         }).catch(err => console.log(err));
     };
@@ -74,20 +87,21 @@ const TeamForm = (props) => {
             id,
             name,
             country,
-            flag_icon
+            flag: flag_icon
         };
 
-        console.log(param);
+        ServerApi.setTeam(param).then(resp => {
+            if (resp.data.status) {
+                history.push('/teams');
+            } else {
+                console.log(resp.data.msg);
+            }
+        }).catch(err => console.log(err));
     };
 
     useEffect(() => {
-
-        console.log('\x1b[41m');
-        console.log(id);
-        console.log('\x1b[0m');
         fromStarter();
-    }, [id]);
-
+    }, []);
 
     return (
         <Form

@@ -119,3 +119,56 @@
     border: none;
     border-radius: 5px;
 }
+
+.box-team {
+    margin: 10px auto;
+    width: 60%;
+    border: solid 1px #ccc;
+    height: 90px;
+}
+
+.team-flag-icon {
+    float: left;
+    margin: 10px 50px;
+}
+
+.team-name {
+    font-weight: bold;
+    font-size: 25px;
+    float: left;
+    margin-top: 25px;
+}
+
+.team-actions {
+    float: right;
+    margin: 35px 35px 0 0;
+}
+
+.link-edit {
+    padding: 10px;
+    margin: 10px 5px;
+    border-radius: 5px;
+    background-color: #ffc107;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.link-edit:hover {
+    background-color: #e0a800;
+}
+
+.link-delete {
+    padding: 10px;
+    margin: 10px 5px;
+    border-radius: 5px;
+    background-color: #dc3545;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.link-delete:hover {
+    background-color: #c82333;
+}

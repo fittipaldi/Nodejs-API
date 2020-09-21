@@ -15,10 +15,10 @@ const SoccerTeamController = {
     },
 
     getFindOne: async (data) => {
-        const all = await SoccerTeam.findOne({
+        const item = await SoccerTeam.findOne({
             where: data
         });
-        return all;
+        return item.get();
     },
 
     setItem: async (data) => {
