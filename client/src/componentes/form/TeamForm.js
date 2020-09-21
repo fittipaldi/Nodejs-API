@@ -75,9 +75,9 @@ const TeamForm = (props) => {
                     });
                 }
             } else {
-                console.log(resp.data.msg);
+                alert(resp.data.msg);
             }
-        }).catch(err => console.log(err));
+        }).catch(err => alert(err));
     };
 
     const submitForm = (id, name, country, flag_icon) => {
@@ -92,9 +92,9 @@ const TeamForm = (props) => {
             if (resp.data.status) {
                 window.location.href = '/';
             } else {
-                console.log(resp.data.msg);
+                alert(resp.data.msg);
             }
-        }).catch(err => console.log(err));
+        }).catch(err => alert(err));
     };
 
     useEffect(() => {
@@ -103,7 +103,7 @@ const TeamForm = (props) => {
 
     return (
         <Form
-            id="team-form"
+            id="form"
             fields={fields}
             onFieldsChange={setFields}
             onSubmit={(values) => {

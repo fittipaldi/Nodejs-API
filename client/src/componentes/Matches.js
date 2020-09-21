@@ -22,15 +22,17 @@ const Matches = (props) => {
                     await setState({...state, isLoading: false, message: '', items: resp.data.data});
                 } else {
                     await setState({...state, isLoading: false, message: resp.msg, items: []});
+                    alert(resp.msg);
                 }
             }).catch(async (err) => {
                 const msg = (typeof err.message != 'undefined') ? err.message : err;
                 await setState({...state, isLoading: false, message: msg, items: []});
-                console.log(err);
+                alert(err);
             });
         } catch (err) {
             const msg = (typeof err.message != 'undefined') ? err.message : err;
             await setState({...state, isLoading: false, message: msg, items: []});
+            alert(msg);
         }
     };
 
@@ -48,14 +50,17 @@ const Matches = (props) => {
                             <div className="team-left">
                                 <h3>{items[i].team_a_data.name}</h3>
                                 <img className="team-flag" src={items[i].team_a_data.flag_icon}></img>
+                                {(!items[i].in_future) && <div className="score-team-a">{items[i].score_a}</div>}
                             </div>
                             <div className="mid-match">
-                                <span>10/09/2020 21:00</span>
-                                <span>X</span>
+                                <p>{items[i].date_match}</p>
+                                <p>{items[i].time_match}</p>
+                                {(items[i].in_future) ? <p>Future</p> : <p>Past</p>}
                             </div>
                             <div className="team-right">
                                 <h3>{items[i].team_z_data.name}</h3>
                                 <img className="team-flag" src={items[i].team_z_data.flag_icon}></img>
+                                {(!items[i].in_future) && <div className="score-team-z">{items[i].score_z}</div>}
                             </div>
                         </div>
                     ))

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import Header from './nav/Header';
-import TeamForm from './form/TeamForm';
+import MatchForm from './form/MatchForm';
 
-const AddTeam = (props) => {
+const AddMatch = (props) => {
 
     const [state, setState] = useState({
         matches: [],
@@ -15,11 +15,11 @@ const AddTeam = (props) => {
 
     return (
         <div className="App">
-            <Header clicked="add-team"/>
+            <Header clicked="add-match"/>
 
-            <TeamForm/>
+            <MatchForm/>
         </div>
     )
 };
 
-export default AddTeam;
+export default AddMatch;

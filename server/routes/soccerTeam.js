@@ -21,6 +21,34 @@ router.get('/all', bearerAuth, async (req, res) => {
     }
 });
 
+router.get('/country/:country', bearerAuth, async (req, res) => {
+    try {
+        const country = req.params.country;
+        const team = await SoccerTeamController.getFindAll({country});
+
+        if (!team) {
+            return res.json({
+                status: false,
+                msg: 'Team Not Found',
+                data: null
+            });
+        }
+
+        return res.json({
+            status: true,
+            msg: 'Success',
+            data: team
+        });
+    } catch (err) {
+        const msg = (typeof err.message != 'undefined') ? err.message : err;
+        return res.status(500).json({
+            status: false,
+            msg: msg,
+            data: null
+        });
+    }
+});
+
 router.get('/item/:id', bearerAuth, async (req, res) => {
     try {
         const id = req.params.id;

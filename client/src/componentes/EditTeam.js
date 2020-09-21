@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import Header from './nav/Header';
-import TeamForm from './team/TeamForm';
+import TeamForm from './form/TeamForm';
 import {ServerApi} from '../utils';
 
 const EditTeam = (props) => {
@@ -30,9 +30,9 @@ const EditTeam = (props) => {
                     flag_icon: resp.data.data.flag_icon,
                 });
             } else {
-                console.log(resp.data.msg);
+                alert(resp.data.msg);
             }
-        }).catch(err => console.log(err));
+        }).catch(err => alert(err));
     };
 
     useEffect(() => {
@@ -41,7 +41,7 @@ const EditTeam = (props) => {
 
     return (
         <div className="App">
-            <Header clicked="matches"/>
+            <Header clicked="edit-team"/>
 
             <TeamForm id={state.id} name={state.name} country={state.country} flag_icon={state.flag_icon}/>
         </div>

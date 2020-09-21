@@ -47,6 +47,17 @@ export class ServerApi extends React.Component {
         return item;
     }
 
+    static async getTeamCountry(country) {
+        const items = await axios({
+            method: 'get',
+            url: this.getServerHost() + '/soccer-team/country/' + country,
+            headers: {
+                'Authorization': 'Bearer ' + this.getToken()
+            }
+        });
+        return items;
+    }
+
     static async detTeam(id) {
         const item = await axios({
             method: 'delete',

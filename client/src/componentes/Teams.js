@@ -20,31 +20,34 @@ const Teams = (props) => {
                     await setState({...state, isLoading: false, message: '', items: resp.data.data});
                 } else {
                     await setState({...state, isLoading: false, message: resp.msg, items: []});
+                    alert(resp.msg);
                 }
             }).catch(async (err) => {
                 const msg = (typeof err.message != 'undefined') ? err.message : err;
                 await setState({...state, isLoading: false, message: msg, items: []});
-                console.log(err);
+                alert(msg);
             });
         } catch (err) {
             const msg = (typeof err.message != 'undefined') ? err.message : err;
             await setState({...state, isLoading: false, message: msg, items: []});
+            alert(msg);
         }
     };
 
     const deleteTeam = (id) => {
-        ServerApi.detTeam(id).then(async (resp) => {
-            if (resp.data.status) {
-                window.location.reload();
-            } else {
-                await setState({...state, isLoading: false, message: resp.msg});
-            }
-        }).catch(async (err) => {
-            const msg = (typeof err.message != 'undefined') ? err.message : err;
-            await setState({...state, isLoading: false, message: msg});
-            console.log(err);
-        });
-
+        if (window.confirm('Are you sure?')) {
+            ServerApi.detTeam(id).then(async (resp) => {
+                if (resp.data.status) {
+                    window.location.reload();
+                } else {
+                    alert(resp.msg);
+                }
+            }).catch(async (err) => {
+                const msg = (typeof err.message != 'undefined') ? err.message : err;
+                await setState({...state, isLoading: false, message: msg});
+                alert(msg);
+            });
+        }
     };
 
     useEffect(() => {
@@ -53,7 +56,7 @@ const Teams = (props) => {
 
     return (
         <div className="App">
-            <Header clicked="matches"/>
+            <Header clicked="list-team"/>
             <div className="list-team">
 
                 {Object.keys(items).map(i => (
