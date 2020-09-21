@@ -1,6 +1,9 @@
 const sequelize = require('../models').sequelize;
 
-module.exports.getMatchesByCountry = (country) => {
+module.exports.getMatchesByTeam = (team_id, limit, offset) => {
+
+    limit = (typeof limit != 'undefined' && limit) ? parseInt(limit) : 50;
+    offset = (typeof offset != 'undefined' && offset) ? parseInt(offset) : 0;
 
     const sql = `
         SELECT 
@@ -20,11 +23,13 @@ module.exports.getMatchesByCountry = (country) => {
         FROM soccer_match AS sm
         LEFT JOIN soccer_team AS st_a ON (sm.team_a = st_a.id) 
         LEFT JOIN soccer_team AS st_z ON (sm.team_z = st_z.id)  
-        WHERE st_a.country = :country OR st_z.country = :country 
-        ORDER BY sm.date_time ASC;
+        WHERE st_a.id = :team_id OR st_z.id = :team_id 
+        ORDER BY sm.date_time ASC
+        LIMIT :limit OFFSET :offset ;
     `;
+
     return sequelize.query(sql, {
-        replacements: {country},
+        replacements: {team_id, limit, offset},
         type: sequelize.QueryTypes.SELECT
     });
 };

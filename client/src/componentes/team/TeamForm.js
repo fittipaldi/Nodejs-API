@@ -22,8 +22,6 @@ const TeamForm = (props) => {
         flag_icon = props.flag_icon;
     }
 
-    const {history} = props;
-
     const teamForm = [
         {
             name: 'id',
@@ -92,7 +90,7 @@ const TeamForm = (props) => {
 
         ServerApi.setTeam(param).then(resp => {
             if (resp.data.status) {
-                history.push('/teams');
+                window.location.href = '/';
             } else {
                 console.log(resp.data.msg);
             }

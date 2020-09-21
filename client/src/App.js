@@ -13,7 +13,7 @@ function App(props) {
             <Switch>
                 <Route exact path="/" component={Teams}/>
                 <Route exact path="/teams" component={Teams}/>
-                <Route exact path="/matches/:country" component={Matches}/>
+                <Route exact path="/matches/:team_id" component={Matches}/>
                 <Route exact path="/add-team" component={AddTeam}/>
                 <Route exact path="/edit-team/:id" component={EditTeam}/>
                 <Route path="*" component={NotFound}/>

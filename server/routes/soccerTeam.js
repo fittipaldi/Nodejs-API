@@ -71,7 +71,6 @@ router.post('/add', bearerAuth, async (req, res) => {
 
 router.put('/edit', bearerAuth, async (req, res) => {
     try {
-
         const id = (typeof req.body.id != 'undefined') ? parseInt(req.body.id) : 0;
         if (!id) {
             throw 'Missing Team ID';

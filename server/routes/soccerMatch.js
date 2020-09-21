@@ -21,10 +21,10 @@ router.get('/all', bearerAuth, async (req, res) => {
     }
 });
 
-router.get('/all/:country', bearerAuth, async (req, res) => {
-    const country = req.params.country;
+router.get('/teams/:team_id', bearerAuth, async (req, res) => {
+    const team_id = req.params.team_id;
     try {
-        const teams = await SoccerMatchController.getAllByCountry(country);
+        const teams = await SoccerMatchController.getAllByTeam(team_id);
         return res.json({
             status: true,
             msg: 'Success',
@@ -42,7 +42,6 @@ router.get('/all/:country', bearerAuth, async (req, res) => {
 
 router.post('/add', bearerAuth, async (req, res) => {
     try {
-
         const savedTeam = await SoccerMatchController.setItem(req.body);
 
         return res.json({

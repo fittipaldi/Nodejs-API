@@ -25,10 +25,10 @@ export class ServerApi extends React.Component {
         return list;
     }
 
-    static async getMatches() {
+    static async getMatches(team_id) {
         const list = await axios({
             method: 'get',
-            url: this.getServerHost() + '/soccer-match/all',
+            url: this.getServerHost() + '/soccer-match/teams/' + team_id,
             headers: {
                 'Authorization': 'Bearer ' + this.getToken()
             }

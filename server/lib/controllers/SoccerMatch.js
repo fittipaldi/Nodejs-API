@@ -1,10 +1,11 @@
-const {sequelize, Op} = require('sequelize');
+const {Op} = require('sequelize');
 const SoccerTeam = require('../models').SoccerTeam;
 const SoccerMatch = require('../models').SoccerMatch;
 SoccerMatch.belongsTo(SoccerTeam, {foreignKey: 'team_a', targetKey: 'id', as: 'team_a_data'});
 SoccerMatch.belongsTo(SoccerTeam, {foreignKey: 'team_z', targetKey: 'id', as: 'team_z_data'});
 const SoccerTeamController = require('../controllers/SoccerTeam');
-const {getMatchesByCountry} = require('../db/queries');
+const dateFormat = require('dateformat');
+const {getMatchesByTeam} = require('../db/queries');
 
 const SoccerMatchController = {
 
@@ -22,19 +23,70 @@ const SoccerMatchController = {
         return all;
     },
 
-    getAllByCountry: async (country) => {
-        const all = await SoccerMatch.findAll({
+    getAllByTeam: async (team_id, limit, offset) => {
+        const list = await getMatchesByTeam(team_id, limit, offset);
+        const now = new Date();
+
+        const all = [];
+        for (let itm of list) {
+            let obj = {
+                id: itm.id,
+                date_time: itm.date_time,
+                in_future: ((new Date(itm.date_time) > now) ? true : false),
+                date_match: dateFormat(itm.date_time, 'dd/mm/yyyy'),
+                time_match: dateFormat(itm.date_time, 'HH:MM'),
+                team_a: itm.team_a,
+                score_a: itm.score_a,
+                team_z: itm.team_z,
+                score_z: itm.score_z,
+                status: itm.status,
+                updated_at: itm.updated_at,
+                team_a_data: {
+                    id: itm.team_a_data_id,
+                    name: itm.team_a_data_name,
+                    country: itm.team_a_data_country,
+                    flag_icon: itm.team_a_data_flag_icon,
+                    status: itm.team_a_data_status,
+                    updated_at: itm.team_a_data_updated_at,
+                },
+                team_z_data: {
+                    id: itm.team_z_data_id,
+                    name: itm.team_z_data_name,
+                    country: itm.team_z_data_country,
+                    flag_icon: itm.team_z_data_flag_icon,
+                    status: itm.team_z_data_status,
+                    updated_at: itm.team_z_data_updated_at,
+                },
+            }
+            all.push(obj);
+        }
+
+        return all;
+    },
+
+    _ORAM_getAllByTeam: async (team_id) => {
+        const all1 = await SoccerMatch.findAll({
             include: [
                 {
                     association: 'team_a_data',
                     where: {
-                        country: {[Op.eq]: country}
+                        id: {[Op.eq]: team_id}
                     }
                 },
+                {association: 'team_z_data',},
+            ],
+            order: [
+                ['date_time', 'ASC'],
+            ],
+            where: {}
+        });
+        const all2 = await SoccerMatch.findAll({
+            include: [
+                {association: 'team_a_data',},
                 {
                     association: 'team_z_data',
                     where: {
-                        country: {[Op.eq]: country}
+                        id: {[Op.eq]: team_id}
                     }
                 },
             ],
@@ -43,6 +95,15 @@ const SoccerMatchController = {
             ],
             where: {}
         });
+
+        const all = all1.concat(all2);
+        const now = new Date();
+        for (let itm of all) {
+            itm.dataValues.in_future = (new Date(itm.date_time) > now) ? true : false;
+            itm.dataValues.date_match = dateFormat(itm.date_time, 'dd/mm/yyyy');
+            itm.dataValues.time_match = dateFormat(itm.date_time, 'HH:MM');
+        }
+
         return all;
     },
 

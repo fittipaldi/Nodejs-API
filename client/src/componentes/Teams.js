@@ -10,7 +10,6 @@ const Teams = (props) => {
         message: ''
     });
 
-    const {history} = props;
     const {items, isLoading, message} = state;
 
     const handleLoadMatches = async () => {
@@ -36,7 +35,7 @@ const Teams = (props) => {
     const deleteTeam = (id) => {
         ServerApi.detTeam(id).then(async (resp) => {
             if (resp.data.status) {
-                history.push('/teams');
+                window.location.reload();
             } else {
                 await setState({...state, isLoading: false, message: resp.msg});
             }
@@ -63,7 +62,7 @@ const Teams = (props) => {
                             <img src={items[i].flag_icon}></img>
                         </div>
                         <div className="team-name">
-                            {items[i].name} - {items[i].country}
+                            <a href={'/matches/' + items[i].id}>{items[i].name} - {items[i].country}</a>
                         </div>
                         <div className="team-actions">
                             <a className="link-edit" href={'/edit-team/' + items[i].id}>Edit</a>

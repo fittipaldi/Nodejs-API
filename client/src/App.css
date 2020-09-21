@@ -132,11 +132,13 @@
     margin: 10px 50px;
 }
 
-.team-name {
+.team-name a {
     font-weight: bold;
-    font-size: 25px;
+    font-size: 23px;
     float: left;
     margin-top: 25px;
+    text-decoration: none;
+    color: #000;
 }
 
 .team-actions {
