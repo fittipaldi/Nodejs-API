@@ -55,7 +55,7 @@ const SoccerTeamController = {
         const flag = (typeof data.flag != 'undefined') ? data.flag.trim() : '';
 
         if (!name && !country && !flag) {
-            throw 'At leas one field is mandatory.';
+            throw 'Ane field is mandatory.';
         }
 
         const item = await SoccerTeam.findOne({

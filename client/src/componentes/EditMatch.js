@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import Header from './nav/Header';
-import TeamForm from './form/TeamForm';
-import {ServerApi} from '../utils';
+import MatchForm from './form/MatchForm';
 
-const EditTeam = (props) => {
+const EditMatch = (props) => {
 
     const {id} = useParams();
 
@@ -12,9 +11,9 @@ const EditTeam = (props) => {
         <div className="App">
             <Header clicked="edit-team"/>
 
-            <TeamForm id={id}/>
+            <MatchForm id={id}/>
         </div>
     )
 };
 
-export default EditTeam;
+export default EditMatch;

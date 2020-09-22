@@ -40,6 +40,26 @@ router.get('/teams/:team_id', bearerAuth, async (req, res) => {
     }
 });
 
+router.get('/item/:id', bearerAuth, async (req, res) => {
+    const id = req.params.id;
+    try {
+        const item = await SoccerMatchController.getFindOne({id});
+
+        return res.json({
+            status: true,
+            msg: 'Success',
+            data: item
+        });
+    } catch (err) {
+        const msg = (typeof err.message != 'undefined') ? err.message : err;
+        return res.status(500).json({
+            status: false,
+            msg: msg,
+            data: null
+        });
+    }
+});
+
 router.post('/add', bearerAuth, async (req, res) => {
     try {
         const savedTeam = await SoccerMatchController.setItem(req.body);
@@ -61,12 +81,12 @@ router.post('/add', bearerAuth, async (req, res) => {
 
 router.put('/edit', bearerAuth, async (req, res) => {
     try {
-        const match_id = (typeof req.body.match_id != 'undefined') ? parseInt(req.body.match_id.trim()) : 0;
-        if (!match_id) {
+        const id = (typeof req.body.id != 'undefined') ? parseInt(req.body.id) : 0;
+        if (!id) {
             throw 'Missing Match ID';
         }
 
-        const savedTeam = await SoccerMatchController.editItem(match_id, req.body);
+        const savedTeam = await SoccerMatchController.editItem(id, req.body);
 
         return res.json({
             status: true,
@@ -85,12 +105,12 @@ router.put('/edit', bearerAuth, async (req, res) => {
 
 router.delete('/del', bearerAuth, async (req, res) => {
     try {
-        const match_id = (typeof req.body.match_id != 'undefined') ? parseInt(req.body.match_id.trim()) : 0;
-        if (!match_id) {
+        const id = (typeof req.body.id != 'undefined') ? parseInt(req.body.id) : 0;
+        if (!id) {
             throw 'Missing Match ID';
         }
 
-        const match = await SoccerMatchController.delItem(match_id);
+        const match = await SoccerMatchController.delItem(id);
 
         return res.json({
             status: true,

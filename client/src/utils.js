@@ -47,6 +47,17 @@ export class ServerApi extends React.Component {
         return item;
     }
 
+    static async getMatch(id) {
+        const item = await axios({
+            method: 'get',
+            url: this.getServerHost() + '/soccer-match/item/' + id,
+            headers: {
+                'Authorization': 'Bearer ' + this.getToken()
+            }
+        });
+        return item;
+    }
+
     static async getTeamCountry(country) {
         const items = await axios({
             method: 'get',
@@ -70,6 +81,18 @@ export class ServerApi extends React.Component {
         return item;
     }
 
+    static async delMatch(id) {
+        const item = await axios({
+            method: 'delete',
+            url: this.getServerHost() + '/soccer-match/del',
+            headers: {
+                'Authorization': 'Bearer ' + this.getToken()
+            },
+            data: {id}
+        });
+        return item;
+    }
+
     static async getTeams() {
         const list = await axios({
             method: 'get',
@@ -81,10 +104,42 @@ export class ServerApi extends React.Component {
         return list;
     }
 
+    static async setMatch(dataParam) {
+        let saved;
+        if (typeof dataParam.id != 'undefined' && dataParam.id > 0) {
+            saved = await axios({
+                method: 'put',
+                url: this.getServerHost() + '/soccer-match/edit',
+                headers: {
+                    'Authorization': 'Bearer ' + this.getToken()
+                },
+                data: dataParam
+            });
+        } else {
+            saved = await axios({
+                method: 'post',
+                url: this.getServerHost() + '/soccer-match/add',
+                headers: {
+                    'Authorization': 'Bearer ' + this.getToken()
+                },
+                data: dataParam
+            });
+        }
+
+        return saved;
+    }
+
     static async setTeam(dataParam) {
         let saved;
         if (typeof dataParam.id != 'undefined' && dataParam.id > 0) {
-
+            saved = await axios({
+                method: 'put',
+                url: this.getServerHost() + '/soccer-team/edit',
+                headers: {
+                    'Authorization': 'Bearer ' + this.getToken()
+                },
+                data: dataParam
+            });
         } else {
             saved = await axios({
                 method: 'post',

@@ -36,6 +36,22 @@ const Matches = (props) => {
         }
     };
 
+    const deleteMatch = (id) => {
+        if (window.confirm('Are you sure?')) {
+            ServerApi.delMatch(id).then(async (resp) => {
+                if (resp.data.status) {
+                    window.location.reload();
+                } else {
+                    alert(resp.msg);
+                }
+            }).catch(async (err) => {
+                const msg = (typeof err.message != 'undefined') ? err.message : err;
+                await setState({...state, isLoading: false, message: msg});
+                alert(msg);
+            });
+        }
+    };
+
     useEffect(() => {
         handleLoadMatches(team_id);
     }, []);
@@ -62,9 +78,15 @@ const Matches = (props) => {
                                 <img className="team-flag" src={items[i].team_z_data.flag_icon}></img>
                                 {(!items[i].in_future) && <div className="score-team-z">{items[i].score_z}</div>}
                             </div>
+
+                            <div className="match-actions">
+                                <a className="link-edit" href={'/edit-match/' + items[i].id}>Edit</a>
+                                <a className="link-delete" onClick={() => {
+                                    deleteMatch(items[i].id)
+                                }}>Delete</a>
+                            </div>
                         </div>
-                    ))
-                    }
+                    ))}
                 </div>
                 :
                 <h2>No Match</h2>

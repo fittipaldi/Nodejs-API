@@ -162,3 +162,8 @@
 .link-delete:hover {
     background-color: #c82333;
 }
+
+.match-actions {
+    float: right;
+    margin: 15px 10px 0 0;
+}

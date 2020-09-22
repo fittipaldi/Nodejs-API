@@ -7,6 +7,7 @@ import NotFound from './componentes/NotFound';
 import AddTeam from './componentes/AddTeam';
 import EditTeam from './componentes/EditTeam';
 import AddMatch from './componentes/AddMatch';
+import EditMatch from './componentes/EditMatch';
 
 function App(props) {
     return (
@@ -19,6 +20,7 @@ function App(props) {
 
                 <Route exact path="/matches/:team_id" component={Matches}/>
                 <Route exact path="/add-match" component={AddMatch}/>
+                <Route exact path="/edit-match/:id" component={EditMatch}/>
 
                 <Route path="*" component={NotFound}/>
             </Switch>
