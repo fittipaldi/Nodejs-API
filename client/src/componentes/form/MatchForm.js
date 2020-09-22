@@ -17,6 +17,7 @@ const MatchForm = (props) => {
         team_country_options: [],
     });
 
+    const {history} = props;
     const {id, match_date, match_time, team_a_id, team_z_id, score_a, score_z, team_country, country_options, team_country_options} = state;
 
     const fromStarter = async () => {
@@ -75,7 +76,7 @@ const MatchForm = (props) => {
 
         ServerApi.setMatch(param).then(resp => {
             if (resp.data.status) {
-                window.location.href = '/';
+                window.location.href = '/matches/' + resp.data.data.team_a;
             } else {
                 alert(resp.data.msg);
             }
